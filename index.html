@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Save & Share</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fdfdfd;
+      color: #222;
+    }
+    header {
+      background: #1e3932;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 { margin: 0; font-size: 22px; }
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    nav a:hover { color: #f4b400; }
+
+    section { padding: 60px 20px; display: none; }
+    section.active { display: block; }
+
+    .hero {
+      height: 90vh;
+      text-align: center;
+      color: white;
+      background: url('https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=1200&q=80') no-repeat center/cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    .hero h1 { font-size: 50px; text-shadow: 2px 2px 6px rgba(0,0,0,0.6); }
+    .hero p { font-size: 20px; max-width: 600px; margin: 20px auto; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
+
+    .cards { display: flex; justify-content: center; flex-wrap: wrap; gap: 25px; margin-top: 40px; }
+    .card {
+      background: white;
+      border-radius: 12px;
+      width: 280px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      text-align: center;
+      padding: 20px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card img { width: 100%; height: 160px; border-radius: 10px; object-fit: cover; }
+    .card h3 { margin-top: 10px; color: #1e3932; }
+
+    .signup-form {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+    .signup-form input, .signup-form select, .signup-form textarea, .signup-form button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+    .signup-form textarea {
+      height: 80px;
+      resize: vertical;
+    }
+    .signup-form button {
+      background: #f4b400;
+      color: #1e3932;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .signup-form button:hover { background: #e19e00; }
+    .google-btn { background: #db4437 !important; color: white !important; }
+    
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+    }
+    .checkbox-container input[type="checkbox"] {
+      width: auto;
+      margin-right: 10px;
+    }
+
+    .food-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+    }
+    .food-card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .food-card img { width: 100%; height: 180px; border-radius: 10px; object-fit: cover; }
+    #map-canvas { width: 100%; height: 400px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    
+    .hidden { display: none; }
+    .alert { 
+      padding: 10px; 
+      margin: 10px 0; 
+      border-radius: 5px; 
+      font-weight: bold;
+    }
+    .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🍲 Food Save & Share</h1>
+  <nav>
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('signup')">Sign Up</a>
+    <a href="#" onclick="showSection('map')">Map</a>
+    <a href="#" onclick="showSection('food')">Food</a>
+  </nav>
+</header>
+
+<section id="home" class="active hero">
+  <h1>Save Food, Serve Humanity</h1>
+  <p>Together, we can reduce food waste and help feed millions of hungry people.</p>
+  <div class="cards">
+    <div class="card" onclick="showSignup('ngo')">
+      <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=600&q=80" alt="NGO Volunteers">
+      <h3>👩‍🤝‍👩 NGO Sign Up</h3>
+    </div>
+    <div class="card" onclick="showSignup('restaurant')">
+      <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Restaurant Kitchen">
+      <h3>🍴 Restaurant Sign Up</h3>
+    </div>
+    <div class="card" onclick="showSignup('common')">
+      <img src="https://images.unsplash.com/photo-1532634896-26909d0d4b6a?auto=format&fit=crop&w=600&q=80" alt="Volunteers">
+      <h3>🙋 Common People Sign Up</h3>
+    </div>
+  </div>
+</section>
+
+<section id="signup">
+  <h2 style="text-align:center;" id="signup-title">Sign Up</h2>
+  <div id="alert-container"></div>
+  
+  <!-- NGO Form -->
+  <form class="signup-form hidden" id="ngo-form" method="POST">
+    <input type="text" name="name" placeholder="Contact Person Name *" required>
+    <input type="email" name="email" placeholder="Email Address *" required>
+    <input type="text" name="phone" placeholder="Phone Number *" required>
+    <input type="password" name="password" placeholder="Password *" required>
+    <input type="password" name="confirm_password" placeholder="Confirm Password *" required>
+    <button type="submit">Register NGO</button>
+    <button type="button" class="google-btn">Sign Up with Google</button>
+  </form>
+
+  <!-- Restaurant Form -->
+  <form class="signup-form hidden" id="restaurant-form" method="POST">
+    <input type="text" name="name" placeholder="Manager/Owner Name *" required>
+    <input type="email" name="email" placeholder="Email Address *" required>
+    <input type="text" name="phone" placeholder="Phone Number *" required>
+    <input type="password" name="password" placeholder="Password *" required>
+    <input type="password" name="confirm_password" placeholder="Confirm Password *" required>
+    <button type="submit">Register Restaurant</button>
+    <button type="button" class="google-btn">Sign Up with Google</button>
+  </form>
+
+  <!-- Common People Form -->
+  <form class="signup-form hidden" id="common-form" method="POST">
+    <input type="text" name="name" placeholder="Full Name *" required>
+    <input type="email" name="email" placeholder="Email Address *" required>
+    <input type="text" name="phone" placeholder="Phone Number *" required>
+    <input type="password" name="password" placeholder="Password *" required>
+    <input type="password" name="confirm_password" placeholder="Confirm Password *" required>
+    <button type="submit">Complete Registration</button>
+    <button type="button" class="google-btn">Sign Up with Google</button>
+  </form>
+</section>
+
+<section id="map">
+  <h2 style="text-align:center;">Nearby Restaurants & Food Pickup Points</h2>
+  <div id="map-canvas"></div>
+</section>
+
+<section id="food">
+  <h2 style="text-align:center;">Available Leftover Food</h2>
+  <div class="food-gallery">
+    <div class="food-card">
+      <img src="https://images.unsplash.com/photo-1631877020033-0f24f8206dfa?auto=format&fit=crop&w=600&q=80" alt="Veg Biryani">
+      <h3>Veg Biryani</h3>
+      <p>Available: 2 hours ago</p>
+      <p>Location: Udupi Restaurant</p>
+    </div>
+    <div class="food-card">
+      <img src="https://images.unsplash.com/photo-1631788012429-fd40863c19e3?auto=format&fit=crop&w=600&q=80" alt="Chicken Curry">
+      <h3>Chicken Curry</h3>
+      <p>Available: 1 hour ago</p>
+      <p>Location: Spice Kitchen</p>
+    </div>
+    <div class="food-card">
+      <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80" alt="Mixed Vegetables">
+      <h3>Mixed Vegetables</h3>
+      <p>Available: 30 minutes ago</p>
+      <p>Location: Green Cafe</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  let currentRole = '';
+
+  function showSection(id) {
+    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function showSignup(role) {
+    currentRole = role;
+    showSection('signup');
+    
+    // Hide all forms
+    document.querySelectorAll('.signup-form').forEach(form => form.classList.add('hidden'));
+    
+    // Show specific form
+    const formId = role + '-form';
+    const form = document.getElementById(formId);
+    form.classList.remove('hidden');
+    form.action = "/auth/signup/" + role;
+    
+    // Update title
+    const titles = {
+      'ngo': 'NGO Registration',
+      'restaurant': 'Restaurant Registration', 
+      'common': 'Individual Registration'
+    };
+    document.getElementById('signup-title').innerText = titles[role] || 'Sign Up';
+  }
+
+  function showAlert(message, type) {
+    const alertContainer = document.getElementById('alert-container');
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type}`;
+    alertDiv.textContent = message;
+    alertContainer.innerHTML = '';
+    alertContainer.appendChild(alertDiv);
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+      alertDiv.remove();
+    }, 5000);
+  }
+
+  // Password validation
+  function validatePasswords(form) {
+    const password = form.querySelector('input[name="password"]').value;
+    const confirmPassword = form.querySelector('input[name="confirm_password"]').value;
+    
+    if (password !== confirmPassword) {
+      showAlert('Passwords do not match!', 'error');
+      return false;
+    }
+    
+    if (password.length < 6) {
+      showAlert('Password must be at least 6 characters long!', 'error');
+      return false;
+    }
+    
+    return true;
+  }
+
+  // Add event listeners to all forms
+  document.querySelectorAll('.signup-form').forEach(form => {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      if (!validatePasswords(this)) return;
+      
+      const formData = new FormData(this);
+      
+      try {
+        const response = await fetch(this.action, {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+          showAlert(result.message, 'success');
+          this.reset();
+        } else {
+          showAlert(result.message, 'error');
+        }
+      } catch (error) {
+        showAlert('Registration failed. Please try again.', 'error');
+      }
+    });
+  });
+
+  function initMap() {
+    var map = new google.maps.Map(document.getElementById('map-canvas'), {
+      center: { lat: 12.9141, lng: 74.8560 },
+      zoom: 13
+    });
+    
+    var locations = [
+      {name: "Spice Hub", lat: 12.914, lng: 74.855, type: "restaurant"},
+      {name: "Food Point", lat: 12.916, lng: 74.857, type: "pickup"},
+      {name: "Helping Hands NGO", lat: 12.912, lng: 74.854, type: "ngo"},
+      {name: "Community Kitchen", lat: 12.918, lng: 74.859, type: "pickup"},
+    ];
+    
+    locations.forEach(loc => {
+      const icon = loc.type === 'restaurant' ? '🍴' : 
+                   loc.type === 'ngo' ? '🤝' : '📍';
+      
+      const marker = new google.maps.Marker({
+        position: {lat: loc.lat, lng: loc.lng},
+        map: map,
+        title: loc.name
+      });
+      
+      const infoWindow = new google.maps.InfoWindow({
+        content: `<div><strong>${loc.name}</strong><br>Type: ${loc.type}</div>`
+      });
+      
+      marker.addListener('click', () => {
+        infoWindow.open(map, marker);
+      });
+    });
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+
+</body>
+</html>
