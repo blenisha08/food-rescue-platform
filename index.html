@@ -36,7 +36,7 @@
     .hero {
       height: 90vh;
       text-align: center;
-      color: white;
+      color: rgb(17, 4, 4);
       background: url('https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=1200&q=80') no-repeat center/cover;
       display: flex;
       flex-direction: column;
@@ -68,7 +68,7 @@
       background: #fff;
       padding: 35px;
       border-radius: 12px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     }
     .signup-form input, .signup-form select, .signup-form textarea, .signup-form button {
       width: 100%;
@@ -136,7 +136,7 @@
   <h1>🍲 Food Save & Share</h1>
   <nav>
     <a href="#" onclick="showSection('home')">Home</a>
-    <a href="#" onclick="showSection('signup')">Sign Up</a>
+    
     <a href="#" onclick="showSection('map')">Map</a>
     <a href="#" onclick="showSection('food')">Food</a>
   </nav>
@@ -149,14 +149,20 @@
     <div class="card" onclick="showSignup('ngo')">
       <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=600&q=80" alt="NGO Volunteers">
       <h3>👩‍🤝‍👩 NGO Sign Up</h3>
+      <p>Join hands with restaurants & distribute food to those in need.</p>
     </div>
     <div class="card" onclick="showSignup('restaurant')">
       <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Restaurant Kitchen">
       <h3>🍴 Restaurant Sign Up</h3>
+      <p>List your extra food & reduce waste responsibly.</p>
+
     </div>
     <div class="card" onclick="showSignup('common')">
-      <img src="https://images.unsplash.com/photo-1532634896-26909d0d4b6a?auto=format&fit=crop&w=600&q=80" alt="Volunteers">
+    <img src="https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=600&q=80" alt="Volunteers Serving Food">
+
       <h3>🙋 Common People Sign Up</h3>
+      <p>Be a volunteer & help in food pickup and delivery.</p>
+
     </div>
   </div>
 </section>
@@ -199,31 +205,49 @@
   </form>
 </section>
 
+<!-- Map -->
+
 <section id="map">
-  <h2 style="text-align:center;">Nearby Restaurants & Food Pickup Points</h2>
-  <div id="map-canvas"></div>
+  <h2>Nearby Restaurants & Food Pickup Points</h2>
+  <iframe
+    id="map"
+    width="100%"
+    height="700"
+    style="border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); border:0;"
+    loading="lazy"
+    allowfullscreen
+    referrerpolicy="no-referrer-when-downgrade"
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.681569256033!2d74.8520!3d12.9141!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35a3f7e9f77ff%3A0xabcdef123456789!2sMangalore!5e0!3m2!1sen!2sin!4v1694600000000!5m2!1sen!2sin">
+</iframe>
 </section>
 
+  
+
+
+
+<!-- Food Details -->
 <section id="food">
   <h2 style="text-align:center;">Available Leftover Food</h2>
   <div class="food-gallery">
     <div class="food-card">
-      <img src="https://images.unsplash.com/photo-1631877020033-0f24f8206dfa?auto=format&fit=crop&w=600&q=80" alt="Veg Biryani">
+      <img src="https://images.unsplash.com/photo-1601050690298-0a1f50a843e8?auto=format&fit=crop&w=600&q=80" alt="Veg Biryani">
       <h3>Veg Biryani</h3>
-      <p>Available: 2 hours ago</p>
-      <p>Location: Udupi Restaurant</p>
+      <p>5 Plates - Veg<br>Pickup: MG Road<br>Restaurant: Spice Hub</p>
     </div>
     <div class="food-card">
-      <img src="https://images.unsplash.com/photo-1631788012429-fd40863c19e3?auto=format&fit=crop&w=600&q=80" alt="Chicken Curry">
+      <img src="https://images.unsplash.com/photo-1622447036019-5026a7566bbb?auto=format&fit=crop&w=600&q=80" alt="Chicken Curry">
       <h3>Chicken Curry</h3>
-      <p>Available: 1 hour ago</p>
-      <p>Location: Spice Kitchen</p>
+      <p>3 Bowls - Non-Veg<br>Pickup: Kankanady<br>Restaurant: Food Point</p>
     </div>
     <div class="food-card">
-      <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80" alt="Mixed Vegetables">
-      <h3>Mixed Vegetables</h3>
-      <p>Available: 30 minutes ago</p>
-      <p>Location: Green Cafe</p>
+      <img src="https://images.unsplash.com/photo-1603899123458-81e3bc9b8722?auto=format&fit=crop&w=600&q=80" alt="Paneer Butter Masala">
+      <h3>Paneer Butter Masala</h3>
+      <p>4 Bowls - Veg<br>Pickup: Lalbagh<br>Restaurant: Curry House</p>
+    </div>
+    <div class="food-card">
+      <img src="https://images.unsplash.com/photo-1604908177177-2a3b8e4ee5f3?auto=format&fit=crop&w=600&q=80" alt="Fish Fry">
+      <h3>Fish Fry</h3>
+      <p>6 Pieces - Non-Veg<br>Pickup: Hampankatta<br>Restaurant: Coastal Treat</p>
     </div>
   </div>
 </section>
@@ -352,7 +376,8 @@
     });
   }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+<script src="<script src=https://maps.googleapis.com/maps/api/js?key=AIzaSyDgN...REALKEY...&callback=initMap" async defer></script>
+</body></script>
 
 </body>
 </html>
