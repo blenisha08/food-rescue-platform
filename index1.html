@@ -164,101 +164,107 @@
         <input type="text" id="foodName" placeholder="Dish Name" required>
         <input type="text" id="foodQty" placeholder="Quantity (e.g. 5 Plates)" required>
         <input type="text" id="foodLocation" placeholder="Pickup Location" required>
+        <input type="text" id="foodContact" placeholder="Contact Number" required>
         <button type="button" onclick="addFood()">Add Food</button>
 
         <div class="food-gallery" id="restaurantFoodList" style="margin-top:20px;"></div>
+      
       </div>
     </div>
   </div>
 
   <script>
-    let currentRole = '';
-    const allRestaurantFood = []; // Global array for sharing food
+  let currentRole = '';
+  const allRestaurantFood = []; // Global array for sharing food
 
-    function showSection(id) {
-      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+  function showSection(id) {
+    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function openModal(role) {
+    currentRole = role;
+    document.getElementById("signupModal").style.display = "flex";
+    document.getElementById("modalTitle").innerText = role + " Sign Up";
+    document.getElementById("ngoFoodGallery").style.display = "none";
+    document.getElementById("restaurantForm").style.display = "none";
+    document.body.style.overflow = "hidden";
+
+    if(role === "NGO") {
+      document.getElementById("ngoFoodGallery").style.display = "block";
+      loadFoodForNGO();
+    }
+    if(role === "Restaurant") {
+      document.getElementById("restaurantForm").style.display = "block";
+    }
+  }
+
+  function closeModal() {
+    document.getElementById("signupModal").style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+
+  document.getElementById("signupForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    alert(currentRole + " Signup successful!");
+
+    if (currentRole === "NGO") {
+      document.getElementById("ngoFoodGallery").style.display = "block";
+      loadFoodForNGO();
+    }
+    if (currentRole === "Restaurant") {
+      document.getElementById("restaurantForm").style.display = "block";
+    }
+  });
+
+  function addFood() {
+    const name = document.getElementById("foodName").value;
+    const qty = document.getElementById("foodQty").value;
+    const contact = document.getElementById("foodContact").value; // FIXED
+    const location = document.getElementById("foodLocation").value;
+
+    if (name && qty && contact && location) {
+      // Save to global array
+      allRestaurantFood.push({ name, qty, contact, location }); // FIXED
+
+      // Update restaurant modal
+      const container = document.getElementById("restaurantFoodList");
+      const div = document.createElement("div");
+      div.classList.add("food-card");
+      div.innerHTML = `
+                       <h3>${name}</h3>
+                       <p>${qty}<br>📞 ${contact}<br>Pickup: ${location}</p>`;
+      container.appendChild(div);
+
+      // Clear fields
+      document.getElementById("foodName").value = "";
+      document.getElementById("foodQty").value = "";
+      document.getElementById("foodContact").value = "";
+      document.getElementById("foodLocation").value = "";
+    } else {
+      alert("Please fill all fields before adding.");
+    }
+  }
+
+  function loadFoodForNGO() {
+    const container = document.getElementById("ngoGalleryList");
+    container.innerHTML = "";
+
+    if(allRestaurantFood.length === 0){
+      container.innerHTML = "<p>No food available at the moment.</p>";
+      return;
     }
 
-    function openModal(role) {
-      currentRole = role;
-      document.getElementById("signupModal").style.display = "flex";
-      document.getElementById("modalTitle").innerText = role + " Sign Up";
-      document.getElementById("ngoFoodGallery").style.display = "none";
-      document.getElementById("restaurantForm").style.display = "none";
-      document.body.style.overflow = "hidden";
-
-      if(role === "NGO") {
-        document.getElementById("ngoFoodGallery").style.display = "block";
-        loadFoodForNGO();
-      }
-      if(role === "Restaurant") {
-        document.getElementById("restaurantForm").style.display = "block";
-      }
-    }
-
-    function closeModal() {
-      document.getElementById("signupModal").style.display = "none";
-      document.body.style.overflow = "auto";
-    }
-
-    document.getElementById("signupForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      alert(currentRole + " Signup successful!");
-
-      if (currentRole === "NGO") {
-        document.getElementById("ngoFoodGallery").style.display = "block";
-        loadFoodForNGO();
-      }
-      if (currentRole === "Restaurant") {
-        document.getElementById("restaurantForm").style.display = "block";
-      }
+    allRestaurantFood.forEach(food => {
+      const div = document.createElement("div");
+      div.classList.add("food-card");
+      div.innerHTML = `
+                       <h3>${food.name}</h3>
+                       <p>${food.qty}<br>📞 ${food.contact}<br>Pickup: ${food.location}</p>`; <!-- FIXED -->
+      container.appendChild(div);
     });
+  }
+</script>
 
-    function addFood() {
-      const name = document.getElementById("foodName").value;
-      const qty = document.getElementById("foodQty").value;
-      const location = document.getElementById("foodLocation").value;
-
-      if (name && qty && location) {
-        // Save to global array
-        allRestaurantFood.push({ name, qty, location });
-
-        // Update restaurant modal
-        const container = document.getElementById("restaurantFoodList");
-        const div = document.createElement("div");
-        div.classList.add("food-card");
-        div.innerHTML = `<img src="https://images.unsplash.com/photo-1604908177177-2a3b8e4ee5f3?auto=format&fit=crop&w=600&q=80" alt="${name}">
-                         <h3>${name}</h3>
-                         <p>${qty}<br>Pickup: ${location}</p>`;
-        container.appendChild(div);
-
-        document.getElementById("foodName").value = "";
-        document.getElementById("foodQty").value = "";
-        document.getElementById("foodLocation").value = "";
-      } else {
-        alert("Please fill all fields before adding.");
-      }
-    }
-
-    function loadFoodForNGO() {
-      const container = document.getElementById("ngoGalleryList");
-      container.innerHTML = "";
-
-      if(allRestaurantFood.length === 0){
-        container.innerHTML = "<p>No food available at the moment.</p>";
-        return;
-      }
-
-      allRestaurantFood.forEach(food => {
-        const div = document.createElement("div");
-        div.classList.add("food-card");
-        div.innerHTML = `<img src="https://images.unsplash.com/photo-1604908177177-2a3b8e4ee5f3?auto=format&fit=crop&w=600&q=80" alt="${food.name}">
-                         <h3>${food.name}</h3>
-                         <p>${food.qty}<br>Pickup: ${food.location}</p>`;
-        container.appendChild(div);
-      });
-    }
-  </script>
 </body>
 </html>
