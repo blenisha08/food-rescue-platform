@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Save & Share</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fdfdfd;
+      color: #050505;
+    }
+    header {
+      background: #1e3932;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff5f5;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 { margin: 0; font-size: 22px; }
+    nav a {
+      margin: 0 15px;
+      color: rgba(239,229,229,0.7);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    nav a:hover { color: #f4b400; }
+    section { padding: 60px 20px; display: none; }
+    section.active { display: block; }
+    /* Hero */
+    .hero {
+      height: 90vh;
+      text-align: center;
+      background: url('https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=1200&q=80') no-repeat center/cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+    .hero h1 { font-size: 50px; color: #fff; text-shadow: 2px 2px 6px rgba(0,0,0,0.6); }
+    .hero p { font-size: 20px; max-width: 600px; margin: 20px auto; color: #fff; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
+    .cards {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 25px; margin-top: 40px;
+    }
+    .card {
+      background: white; border-radius: 12px; width: 280px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      text-align: center; padding: 20px; cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card img {
+      width: 100%; height: 160px; border-radius: 10px; object-fit: cover;
+    }
+    .card h3 { margin-top: 10px; color: #1e3932; }
+    /* Food gallery */
+    .food-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px; margin-top: 20px;
+    }
+    .food-card {
+      background: #fff; padding: 15px; border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1); text-align: center;
+    }
+    .food-card img {
+      width: 100%; height: 180px; border-radius: 10px; object-fit: cover;
+    }
+    /* Modal */
+    .modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center;
+      z-index: 2000;
+    }
+    .modal-content {
+      background: #fff; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3); text-align: center; position: relative;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn { from {opacity:0; transform:scale(0.9);} to {opacity:1; transform:scale(1);} }
+    .modal-content h2 { margin-bottom: 20px; }
+    .modal-content input, .modal-content button {
+      width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px;
+      border: 1px solid #ccc; font-size: 15px;
+    }
+    .modal-content button {
+      background: #f4b400; color: #1e3932; font-weight: bold; border: none; cursor: pointer; transition: 0.2s;
+    }
+    .modal-content button:hover { background: #e19e00; }
+    .google-btn { background: #db4437 !important; color: white !important; }
+    .close-btn {
+      position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer; color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🍲 Food Save & Share</h1>
+    <nav>
+      <a href="#" onclick="showSection('home')">Home</a>
+      <a href="#" onclick="showSection('map-section')">Map</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="active hero">
+    <h1>Save Food, Serve Humanity</h1>
+    <p>Together, we can reduce food waste and help feed millions of hungry people.</p>
+    <div class="cards">
+      <div class="card" onclick="openModal('NGO')">
+        <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=600&q=80" alt="NGO Volunteers">
+        <h3>👩‍🤝‍👩 NGO Sign Up</h3>
+        <p style="color:black;">Join hands with restaurants & distribute food to those in need.</p>
+      </div>
+      <div class="card" onclick="openModal('Restaurant')">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Restaurant Kitchen">
+        <h3>🍴 Restaurant Sign Up</h3>
+        <p style="color:black;">List your extra food & reduce waste responsibly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map -->
+  <section id="map-section">
+    <h2 style="text-align:center;">Nearby Restaurants & Food Pickup Points</h2>
+    <iframe width="100%" height="400" style="border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); border:0;" loading="lazy" allowfullscreen
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.681569256033!2d74.8520!3d12.9141!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba35a3f7e9f77ff%3A0xabcdef123456789!2sMangalore!5e0!3m2!1sen!2sin!4v1694600000000!5m2!1sen!2sin">
+    </iframe>
+  </section>
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2 id="modalTitle">Sign Up</h2>
+
+      <!-- Common Signup Form -->
+      <form id="signupForm">
+        <input type="text" placeholder="Full Name / Organization" required>
+        <input type="email" placeholder="Email" required>
+        <input type="text" placeholder="Phone" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+        <button type="button" class="google-btn">Sign Up with Google</button>
+      </form>
+
+      <!-- NGO Food Availability -->
+      <div id="ngoFoodGallery" style="display:none; margin-top:20px;">
+        <h3>Available Leftover Food</h3>
+        <div class="food-gallery" id="ngoGalleryList">
+          <!-- Food items will be dynamically inserted here -->
+        </div>
+      </div>
+
+      <!-- Restaurant Food Listing -->
+      <div id="restaurantForm" style="display:none; margin-top:20px;">
+        <h3>List Your Extra Food</h3>
+        <input type="text" id="foodName" placeholder="Dish Name" required>
+        <input type="text" id="foodQty" placeholder="Quantity (e.g. 5 Plates)" required>
+        <input type="text" id="foodLocation" placeholder="Pickup Location" required>
+        <button type="button" onclick="addFood()">Add Food</button>
+
+        <div class="food-gallery" id="restaurantFoodList" style="margin-top:20px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentRole = '';
+    const allRestaurantFood = []; // Global array for sharing food
+
+    function showSection(id) {
+      document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function openModal(role) {
+      currentRole = role;
+      document.getElementById("signupModal").style.display = "flex";
+      document.getElementById("modalTitle").innerText = role + " Sign Up";
+      document.getElementById("ngoFoodGallery").style.display = "none";
+      document.getElementById("restaurantForm").style.display = "none";
+      document.body.style.overflow = "hidden";
+
+      if(role === "NGO") {
+        document.getElementById("ngoFoodGallery").style.display = "block";
+        loadFoodForNGO();
+      }
+      if(role === "Restaurant") {
+        document.getElementById("restaurantForm").style.display = "block";
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("signupModal").style.display = "none";
+      document.body.style.overflow = "auto";
+    }
+
+    document.getElementById("signupForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert(currentRole + " Signup successful!");
+
+      if (currentRole === "NGO") {
+        document.getElementById("ngoFoodGallery").style.display = "block";
+        loadFoodForNGO();
+      }
+      if (currentRole === "Restaurant") {
+        document.getElementById("restaurantForm").style.display = "block";
+      }
+    });
+
+    function addFood() {
+      const name = document.getElementById("foodName").value;
+      const qty = document.getElementById("foodQty").value;
+      const location = document.getElementById("foodLocation").value;
+
+      if (name && qty && location) {
+        // Save to global array
+        allRestaurantFood.push({ name, qty, location });
+
+        // Update restaurant modal
+        const container = document.getElementById("restaurantFoodList");
+        const div = document.createElement("div");
+        div.classList.add("food-card");
+        div.innerHTML = `<img src="https://images.unsplash.com/photo-1604908177177-2a3b8e4ee5f3?auto=format&fit=crop&w=600&q=80" alt="${name}">
+                         <h3>${name}</h3>
+                         <p>${qty}<br>Pickup: ${location}</p>`;
+        container.appendChild(div);
+
+        document.getElementById("foodName").value = "";
+        document.getElementById("foodQty").value = "";
+        document.getElementById("foodLocation").value = "";
+      } else {
+        alert("Please fill all fields before adding.");
+      }
+    }
+
+    function loadFoodForNGO() {
+      const container = document.getElementById("ngoGalleryList");
+      container.innerHTML = "";
+
+      if(allRestaurantFood.length === 0){
+        container.innerHTML = "<p>No food available at the moment.</p>";
+        return;
+      }
+
+      allRestaurantFood.forEach(food => {
+        const div = document.createElement("div");
+        div.classList.add("food-card");
+        div.innerHTML = `<img src="https://images.unsplash.com/photo-1604908177177-2a3b8e4ee5f3?auto=format&fit=crop&w=600&q=80" alt="${food.name}">
+                         <h3>${food.name}</h3>
+                         <p>${food.qty}<br>Pickup: ${food.location}</p>`;
+        container.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
